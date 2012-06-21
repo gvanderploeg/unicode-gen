@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -21,11 +21,36 @@
   <body>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script type="text/javascript">
-	$(document).ready(function() {
-		$("#inputString").keyup(function() {
-			$("#outputString").text($("#inputString").val());
-		});
+var mapping = {
+	'a': {
+		'subtle': [ 'U+5EE3' ],
+		'rigid' : [ 'U+5EE4' ]
+	},
+	'i': {
+		'subtle': [ 'ï' ],
+		'rigid': [ 'ï' ]
+	}
+};
+
+var getSubstitute = function(character, category) {
+	if (mapping[character] && mapping[character][category]) {
+		// TODO: pick random instead of first
+		return mapping[character][category][0];
+	}
+	return character;
+}
+var replace = function(input) {
+	var mappedResult = $.map((input).split(''), function(n) {
+		return getSubstitute(n, 'rigid');
 	});
+	return mappedResult.join("");
+}
+$(document).ready(function() {
+	$("#inputString").keyup(function() {
+		var replaced = replace($("#inputString").val());
+		$("#outputString").text(replaced);
+	});
+});
 	</script>
 	
 
