@@ -32,7 +32,12 @@
           </execution>
         </executions>
         <configuration>
-          <jsSrcDir>src/main/webapp</jsSrcDir>
+          <jsSrcDir>src/main/webapp/js</jsSrcDir>
+          <sourceIncludes>
+            <include>jquery.min.js</include>
+            <include>bootstrap.min.js</include>
+            <include>unicode-gen.js</include>
+          </sourceIncludes>
         </configuration>
       </plugin>
     </plugins>

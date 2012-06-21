@@ -14,72 +14,14 @@
     }
   </style>
   <link href="css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="css/unicode-gen.css" rel="stylesheet">
 
   <!-- Le fav and touch icons -->
 </head>
 
 <body>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript">
-var unicodeGen = (function() {
-
-  var mapping = {
-    'a':{
-      'rigid':[ 'e0', 'e1', 'e2', 'e3', 'e4', 'e5' ]
-    },
-    'i':{
-      'rigid':[ 'ec', 'ed', 'ef' ]
-    },
-    'e':{
-      'rigid':[ 'e8', 'e9', 'ea', 'eb' ]
-    },
-    'o':{
-      'rigid':[ 'f2' ]
-    },
-    'u': {
-      'rigid': ['f9', 'fa', 'fb', 'fc']
-    }
-  };
-  var RADIX_HEX = 16;
-
-
-  var getSubstitute = function (character, category) {
-    if (mapping[character] && mapping[character][category]) {
-      var listOfReplacements = mapping[character][category];
-      var whichOne = random(0, listOfReplacements.length);
-
-      return String.fromCharCode(parseInt(listOfReplacements[whichOne], RADIX_HEX));
-    }
-    return character;
-  };
-
-  return {
-    random : function (min, max) {
-      return Math.floor(Math.random()*max+1)+min;
-    },
-
-  replace : function (input) {
-      var mappedResult = $.map((input).split(''), function (n) {
-        return getSubstitute(n, 'rigid');
-      });
-      return mappedResult.join("");
-    }
-  };
-})();
-
-
-var doit = function () {
-  var replaced = unicodeGen.replace($('#inputString').val());
-  $('#outputString').text(replaced);
-};
-
-
-$(document).ready(function () {
-    $('#inputString').keyup(doit);
-    doit();
-  });
-</script>
-
+<script type="text/javascript" src="js/unicode-gen.js"></script>
 
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
@@ -93,10 +35,6 @@ $(document).ready(function () {
 
       <div class="nav-collapse">
         <ul class="nav">
-          <!--
-                   <li class="active"><a href="#">Home</a></li>
-                   <li><a href="#about">About</a></li>
-             -->
         </ul>
       </div>
       <!--/.nav-collapse -->
@@ -108,38 +46,75 @@ $(document).ready(function () {
 
   <h1>Unicode string generator</h1>
 
-  <p>Use this generator to generate a generation's generation gen.</p>
+  <p>Did you ever <a
+      href="http://stackoverflow.com/questions/1343223/what-makes-a-good-test-string-for-testing-web-forms-for-unicode-compatibility">test strings for unicode compatibility</a>?
+    Ever looked for inspiration and found <a href="http://www.tamasoft.co.jp/en/general-info/unicode.html">the whole
+      Unicode table</a>?
+    Create your own shiny, random, any-size, pre-defined or custom tailored, Unicode strings here.
+    Search no more, this is your full service Unicode test string generator.
+  </p>
 
-  <div>
-    <form>
-      <input type="button" id="inputLorem" name="foo" value="Use lorem ipsum"></input>
-      <br/>
-      <textarea id="inputString" name="inputString">Lorem Ipsum foobar 123</textarea>
-    </form>
-  </div>
-  <div id="outputString"></div>
+  <div class="row">
 
+        <div class="span4">
+          <div class="well inputString">
+          <textarea id="inputString" placeholder="Type your proza here..." name="inputString"></textarea>
+          </div>
+        </div>
 
-</div>
-<!-- /container -->
+    <div class="span4">
+      <div class="content">
+        <div class="btn-group">
 
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
+        <a class="btn btn-large" id="inputLorem">Bacon ipsum</a>
+        <a class="btn btn-large" id="inputi18n">i18n</a>
+        <a class="btn btn-large" id="inputNam">Nam</a>
+        <a class="btn btn-large" id="inputSmiley">:-)</a>
+        </div>
+        <p>
+          Start with one of these pre-defined strings or type your own.
+        </p>
 <!--
-    <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-transition.js"></script>
-    <script src="../assets/js/bootstrap-alert.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
-    <script src="../assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
-    <script src="../assets/js/bootstrap-popover.js"></script>
-    <script src="../assets/js/bootstrap-button.js"></script>
-    <script src="../assets/js/bootstrap-collapse.js"></script>
-    <script src="../assets/js/bootstrap-carousel.js"></script>
-    <script src="../assets/js/bootstrap-typeahead.js"></script>
-  -->
+          <h3>
+            Replacement rate
+          </h3>
+        <div class="btn-group perc" data-toggle="buttons-radio">
+          <button id="perc20" value="20" class="btn">20%</button>
+          <button id="perc40" value="40" class="btn">40%</button>
+          <button id="perc60" value="60" class="btn">60%</button>
+          <button id="perc80" value="80" class="btn active">80%</button>
+          <button id="perc100" value="100" class="btn">100%</button>
+        </div>
+        -->
+      </div>
+    </div>
+
+    <div class="span4">
+          <div class="well" id="outputString"></div>
+        </div>
+
+  </div>
+  <footer>
+  <p>&copy; Geert van der Ploeg 2012</p>
+  </footer>
+  </div>
+  <!-- /container -->
+
+
+<script src="js/bootstrap-button.js"></script>
+<!--
+  <script src="../assets/js/jquery.js"></script>
+  <script src="../assets/js/bootstrap-transition.js"></script>
+  <script src="../assets/js/bootstrap-alert.js"></script>
+  <script src="../assets/js/bootstrap-modal.js"></script>
+  <script src="../assets/js/bootstrap-dropdown.js"></script>
+  <script src="../assets/js/bootstrap-scrollspy.js"></script>
+  <script src="../assets/js/bootstrap-tab.js"></script>
+  <script src="../assets/js/bootstrap-tooltip.js"></script>
+  <script src="../assets/js/bootstrap-popover.js"></script>
+  <script src="../assets/js/bootstrap-collapse.js"></script>
+  <script src="../assets/js/bootstrap-carousel.js"></script>
+  <script src="../assets/js/bootstrap-typeahead.js"></script>
+-->
 </body>
 </html>
