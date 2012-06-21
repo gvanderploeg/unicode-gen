@@ -1,101 +1,132 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Unicode string generator</title>
-		<meta name="description" content="A Unicode string generator. For the fun of it.">
-		<meta name="author" content="Geert van der Ploeg">
-    <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unicode string generator</title>
+  <meta name="description" content="A Unicode string generator. For the fun of it.">
+  <meta name="author" content="Geert van der Ploeg">
+  <!-- Le styles -->
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+  </style>
+  <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
-    <!-- Le fav and touch icons -->
-  </head>
+  <!-- Le fav and touch icons -->
+</head>
 
-  <body>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script type="text/javascript">
-var mapping = {
-	'a': {
-		'subtle': [ 'U+5EE3' ],
-		'rigid' : [ 'U+5EE4' ]
-	},
-	'i': {
-		'subtle': [ 'ï' ],
-		'rigid': [ 'ï' ]
-	}
+<body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript">
+var unicodeGen = (function() {
+
+  var mapping = {
+    'a':{
+      'rigid':[ 'e0', 'e1', 'e2', 'e3', 'e4', 'e5' ]
+    },
+    'i':{
+      'rigid':[ 'ec', 'ed', 'ef' ]
+    },
+    'e':{
+      'rigid':[ 'e8', 'e9', 'ea', 'eb' ]
+    },
+    'o':{
+      'rigid':[ 'f2' ]
+    },
+    'u': {
+      'rigid': ['f9', 'fa', 'fb', 'fc']
+    }
+  };
+  var RADIX_HEX = 16;
+
+
+  var getSubstitute = function (character, category) {
+    if (mapping[character] && mapping[character][category]) {
+      var listOfReplacements = mapping[character][category];
+      var whichOne = random(0, listOfReplacements.length);
+
+      return String.fromCharCode(parseInt(listOfReplacements[whichOne], RADIX_HEX));
+    }
+    return character;
+  };
+
+  return {
+    random : function (min, max) {
+      return Math.floor(Math.random()*max+1)+min;
+    },
+
+  replace : function (input) {
+      var mappedResult = $.map((input).split(''), function (n) {
+        return getSubstitute(n, 'rigid');
+      });
+      return mappedResult.join("");
+    }
+  };
+})();
+
+
+var doit = function () {
+  var replaced = unicodeGen.replace($('#inputString').val());
+  $('#outputString').text(replaced);
 };
 
-var getSubstitute = function(character, category) {
-	if (mapping[character] && mapping[character][category]) {
-		// TODO: pick random instead of first
-		return mapping[character][category][0];
-	}
-	return character;
-}
-var replace = function(input) {
-	var mappedResult = $.map((input).split(''), function(n) {
-		return getSubstitute(n, 'rigid');
-	});
-	return mappedResult.join("");
-}
-$(document).ready(function() {
-	$("#inputString").keyup(function() {
-		var replaced = replace($("#inputString").val());
-		$("#outputString").text(replaced);
-	});
-});
-	</script>
-	
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Unicode String generator</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-			<!--
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-			  -->
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+$(document).ready(function () {
+    $('#inputString').keyup(doit);
+    doit();
+  });
+</script>
 
+
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
     <div class="container">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a class="brand" href="#">Unicode String generator</a>
 
-      <h1>Unicode string generator</h1>
-      <p>Use this generator to generate a generation's generation gen.</p>
-	  
-	  		<div>
-		<form>
-			<button id="inputLorem" value="Use lorem ipsum"></button>
-			<br />
-			<textarea id="inputString" name="inputString">Lorem Ipsum foobar 123</textarea>
-		</form>
-		</div>
-		<div id="outputString"></div>
-		
+      <div class="nav-collapse">
+        <ul class="nav">
+          <!--
+                   <li class="active"><a href="#">Home</a></li>
+                   <li><a href="#about">About</a></li>
+             -->
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
 
-    </div> <!-- /container -->
+<div class="container">
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-	<!--
+  <h1>Unicode string generator</h1>
+
+  <p>Use this generator to generate a generation's generation gen.</p>
+
+  <div>
+    <form>
+      <input type="button" id="inputLorem" name="foo" value="Use lorem ipsum"></input>
+      <br/>
+      <textarea id="inputString" name="inputString">Lorem Ipsum foobar 123</textarea>
+    </form>
+  </div>
+  <div id="outputString"></div>
+
+
+</div>
+<!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
     <script src="../assets/js/bootstrap-alert.js"></script>
@@ -109,6 +140,6 @@ $(document).ready(function() {
     <script src="../assets/js/bootstrap-collapse.js"></script>
     <script src="../assets/js/bootstrap-carousel.js"></script>
     <script src="../assets/js/bootstrap-typeahead.js"></script>
-	-->
-  </body>
+  -->
+</body>
 </html>
