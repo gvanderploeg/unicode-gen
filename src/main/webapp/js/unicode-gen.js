@@ -82,6 +82,9 @@ $(document).ready(function () {
   $('#inputString').keyup(doit);
   $('#inputString').change(doit);
   doit();
+  
+  // Encode the title as well, while we're at it.
+  $("h1#title").text(unicodeGen.replace($("h1#title").text()));
 
 
   $('#inputi18n,#inputSmiley,#inputNam').click(function () {
