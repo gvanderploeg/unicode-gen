@@ -2,32 +2,32 @@
 var unicodeGen = (function() {
 
   var mapping = {
-    'a':[ 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'ff41'],
-    'b': ['ff42'],
+    'a':[ 'e0', 'e1', 'e2', 'e3', 'e4', 'e5', 'ff41', '251'],
+    'b': ['ff42', '183', '185'],
     'c': ['ff43'],
-    'd':['13e7', 'ff44'],
+    'd':['13e7', 'ff44', '501'],
     'e': [ 'e8', 'e9', 'ea', 'eb' , 'ff45'],
     'f': ['ff46'],
-    'g': ['ff47'],
-    'h': ['ff48'],
+    'g': ['ff47', '1e5', '262'],
+    'h': ['ff48', '570', '266'],
     'i': [ 'ec', 'ed', 'ef', 'ff49'],
-    'j': ['ff4a'],
-    'k': ['ff4b'],
-    'l': ['ff4c'],
-    'm': ['ff4d'],
-    'n': ['ff4e'],
-    'o': [ 'f2', 'ff4f' ],
-    'p': ['ff50'],
-    'q': ['ff51'],
+    'j': ['ff4a', '3f3', '575'],
+    'k': ['ff4b', '199'],
+    'l': ['ff4c', '26d'],
+    'm': ['ff4d', '3fb'],
+    'n': ['ff4e', '43b', '509'],
+    'o': [ 'f2', 'ff4f', '7c0' ],
+    'p': ['ff50', '3c1'],
+    'q': ['ff51', '24b'],
     'r': ['ff52'],
-    's': ['ff53'],
+    's': ['ff53', '455'],
     't': ['ff54'],
     'u': ['f9', 'fa', 'fb', 'fc', 'ff55'],
-    'v': ['ff56'],
-    'w': ['ff57'],
-    'x': ['ff58'],
-    'y': ['ff59'],
-    'z': ['ff5a']
+    'v': ['ff56', '475'],
+    'w': ['ff57', '26f', '270'],
+    'x': ['ff58', '445', '425', '4fd'],
+    'y': ['ff59', '3d2'],
+    'z': ['ff5a', '225', '1b6']
   };
   var RADIX_HEX = 16;
 
@@ -62,6 +62,50 @@ var unicodeGen = (function() {
         return getSubstitute(n, 'rigid');
       });
       return mappedResult.join("");
+    },
+
+    getUnicodeTableSource: function() {
+      /*
+       Return a base for populating a 0-ffff table.
+      Form:
+      [
+        {
+          "label": "0 - 1fff",
+          "startIndex: 0,
+          count: 4095
+          },
+        {
+          "label": "2000 - 2fff",
+          "startIndex: 2000,
+          count: 4095
+          },
+
+       */
+      var items = [];
+      for (var i = 0; i < 8; i++) {
+        var startIndex = i*2048;
+        var endIndex = startIndex + 2047;
+        var label = startIndex.toString(16) + " - " + endIndex.toString(16);
+        items.push( {"label" : label, "startIndex" : startIndex, "count" : 2047});
+      }
+      return items;
+    },
+    getUnicodeTable: function(start, end) {
+
+      var html = "<table>";
+      for (var i = start; i < end; i++) {
+        if (i % 16 == 0) {
+          html += "<tr>";
+        }
+        html +="<td>";
+        html += i.toString(16) + "<br />";
+        html += String.fromCharCode(i);
+        html += "</td>";
+        if (i % 16 == 15) {
+          html += "</tr>";
+        }
+      }
+      return html;
     }
   };
 })();
@@ -120,5 +164,23 @@ $(document).ready(function () {
         }
         $('#inputLorem').toggleClass("disabled");
     });
+  });
+  
+  $('#unicodeTable').on('shown', function () {
+    /*
+    $("#unicodePagination ul").append(function() {
+      var tableStructure = unicodeGen.getUnicodeTableSource();
+      var html = "";
+      for (i in tableStructure) {
+        html += '<li><a href="#" data-start="' + tableStructure[i]["start"] +'" data-count="' + tableStructure[i]["count"] +'">' + tableStructure[i]["label"] +"</a></li>"
+      }
+      return html;
+    });
+    $("#unicodePagination li a").click(function() {
+      console.log($(this).attr("data-start"));
+    })
+     */
+    // initially populate with 0000 - 0fff
+    $("#unicodeTableBody").html(unicodeGen.getUnicodeTable(0, 4096));
   });
 });
